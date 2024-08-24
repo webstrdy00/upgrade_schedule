@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ScheduleService {
@@ -47,5 +48,12 @@ public class ScheduleService {
     public Page getAllSchedules(Pageable pageable) {
         Page<Schedule> schedulePage = scheduleRepository.findAllByOrderByModifiedAtDesc(pageable);
         return schedulePage.map(ScheduleListResponseDto::fromEntity);
+    }
+    @Transactional
+    public void deleteSchedule(Long id) {
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("일정을 찾을 수 없습니다."));
+
+        scheduleRepository.delete(schedule);
     }
 }
