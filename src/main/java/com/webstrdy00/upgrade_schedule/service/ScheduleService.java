@@ -1,15 +1,19 @@
 package com.webstrdy00.upgrade_schedule.service;
 
+import com.webstrdy00.upgrade_schedule.dto.scheduleDto.ScheduleListResponseDto;
 import com.webstrdy00.upgrade_schedule.dto.scheduleDto.ScheduleRequestDto;
 import com.webstrdy00.upgrade_schedule.dto.scheduleDto.ScheduleResponseDto;
 import com.webstrdy00.upgrade_schedule.entity.Schedule;
 import com.webstrdy00.upgrade_schedule.repository.ScheduleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
-
+    @Autowired
     public ScheduleService(ScheduleRepository scheduleRepository) {
         this.scheduleRepository = scheduleRepository;
     }
@@ -38,5 +42,10 @@ public class ScheduleService {
 
         Schedule updateSchedule = scheduleRepository.save(schedule);
         return ScheduleResponseDto.fromEntity(updateSchedule);
+    }
+
+    public Page getAllSchedules(Pageable pageable) {
+        Page<Schedule> schedulePage = scheduleRepository.findAllByOrderByModifiedAtDesc(pageable);
+        return schedulePage.map(ScheduleListResponseDto::fromEntity);
     }
 }
