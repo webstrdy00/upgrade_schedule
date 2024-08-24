@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +44,12 @@ public class ScheduleController {
         return ResponseEntity.ok(schedule);
     }
 
+    /**
+     * 일정 전체 조회(페이징 적용)
+     * @param page
+     * @param size
+     * @return schedulePage
+     */
     @GetMapping
     public ResponseEntity<Page<ScheduleListResponseDto>> getAllSchedules(@RequestParam(defaultValue = "0") int page,
                                                                          @RequestParam(defaultValue = "10")int size){
