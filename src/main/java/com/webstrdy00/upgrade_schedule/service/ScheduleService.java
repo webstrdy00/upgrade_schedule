@@ -37,13 +37,19 @@ public class ScheduleService {
 
         return ScheduleResponseDto.fromEntity(savedSchedule);
     }
-
+    @Transactional(readOnly = true)
     public ScheduleResponseDto getSchedule(Long id) {
         Schedule schedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("일정을 찾을 수 없습니다."));
-        return ScheduleResponseDto.fromEntity(schedule);
-    }
 
+        // 지연 로딩된 유저 정보를 명시적으로 로드
+        List<UserBriefDto> assignedUsers = schedule.getUserScheduleList().stream()
+                .map(userSchedule -> UserBriefDto.fromEntity(userSchedule.getUser()))
+                .collect(Collectors.toList());
+
+        return ScheduleResponseDto.fromEntityWithUsers(schedule, assignedUsers);
+    }
+    @Transactional(readOnly = true)
     public Page getAllSchedules(Pageable pageable) {
         Page<Schedule> schedulePage = scheduleRepository.findAllByOrderByModifiedAtDesc(pageable);
         return schedulePage.map(ScheduleListResponseDto::fromEntity);

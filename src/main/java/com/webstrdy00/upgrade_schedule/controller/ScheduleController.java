@@ -4,7 +4,6 @@ import com.webstrdy00.upgrade_schedule.dto.scheduleDto.ScheduleListResponseDto;
 import com.webstrdy00.upgrade_schedule.dto.scheduleDto.ScheduleRequestDto;
 import com.webstrdy00.upgrade_schedule.dto.scheduleDto.ScheduleResponseDto;
 import com.webstrdy00.upgrade_schedule.dto.userDto.UserBriefDto;
-import com.webstrdy00.upgrade_schedule.dto.userDto.UserResponseDto;
 import com.webstrdy00.upgrade_schedule.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
