@@ -1,12 +1,10 @@
 package com.webstrdy00.upgrade_schedule.service;
 
-import com.webstrdy00.upgrade_schedule.dto.scheduleDto.ScheduleBriefDto;
 import com.webstrdy00.upgrade_schedule.dto.scheduleDto.ScheduleResponseDto;
 import com.webstrdy00.upgrade_schedule.dto.userDto.UserRequestDto;
 import com.webstrdy00.upgrade_schedule.dto.userDto.UserResponseDto;
 import com.webstrdy00.upgrade_schedule.entity.Schedule;
 import com.webstrdy00.upgrade_schedule.entity.User;
-import com.webstrdy00.upgrade_schedule.entity.UserSchedule;
 import com.webstrdy00.upgrade_schedule.repository.ScheduleRepository;
 import com.webstrdy00.upgrade_schedule.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

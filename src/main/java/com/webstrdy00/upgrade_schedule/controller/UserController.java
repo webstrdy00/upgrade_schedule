@@ -1,6 +1,5 @@
 package com.webstrdy00.upgrade_schedule.controller;
 
-import com.webstrdy00.upgrade_schedule.dto.scheduleDto.ScheduleBriefDto;
 import com.webstrdy00.upgrade_schedule.dto.scheduleDto.ScheduleResponseDto;
 import com.webstrdy00.upgrade_schedule.dto.userDto.UserRequestDto;
 import com.webstrdy00.upgrade_schedule.dto.userDto.UserResponseDto;

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.webstrdy00.upgrade_schedule.dto.commentDto.CommentResponseDto;
 import com.webstrdy00.upgrade_schedule.dto.userDto.UserBriefDto;
-import com.webstrdy00.upgrade_schedule.dto.userDto.UserResponseDto;
 import com.webstrdy00.upgrade_schedule.entity.Schedule;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,9 +37,12 @@ public class ScheduleResponseDto {
         dto.setComments(schedule.getComments().stream()
                 .map(CommentResponseDto::fromEntity)
                 .collect(Collectors.toList()));
-        dto.setAssignedUsers(schedule.getUserScheduleList().stream()
-                .map(userSchedule -> UserBriefDto.fromEntity(userSchedule.getUser()))
-                .collect(Collectors.toList()));
+        return dto;
+    }
+
+    public static ScheduleResponseDto fromEntityWithUsers(Schedule schedule, List<UserBriefDto> assignedUsers){
+        ScheduleResponseDto dto = fromEntity(schedule);
+        dto.setAssignedUsers(assignedUsers);
         return dto;
     }
 }
