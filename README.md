@@ -20,7 +20,7 @@ Development
 
 
 # :bar_chart: ERD 
-![upgrade_schedule_ERD](https://github.com/user-attachments/assets/4c8d6dfe-5d00-4e45-b0a7-199fc37c634b)
+![ERD](https://github.com/user-attachments/assets/d44c5dc7-c6a5-4a7d-8dcb-480c84f44ae2)
 
 
 # :scroll: SQL 
@@ -76,3 +76,86 @@ create table user_schedule
 ```
 
 # :bookmark_tabs: Repository 
+```
+project-root/
+│
+├── build/
+├── gradle/
+├── src/
+│   └── main/
+│       └── java/
+│           └── com.webstrdy00.upgrade_schedule/
+│               ├── config/
+│               │   ├── JacksonConfig.java
+│               │   ├── PasswordEncoder.java
+│               │   └── WebMvcConfig.java
+│               │
+│               ├── controller/
+│               │   ├── CommentController.java
+│               │   ├── ScheduleController.java
+│               │   └── UserController.java
+│               │
+│               ├── dto/
+│               │   ├── commentDto/
+│               │   │   ├── CommentRequestDto.java
+│               │   │   └── CommentResponseDto.java
+│               │   │
+│               │   ├── scheduleDto/
+│               │   │   ├── ScheduleBriefDto.java
+│               │   │   ├── ScheduleListResponseDto.java
+│               │   │   ├── ScheduleRequestDto.java
+│               │   │   ├── ScheduleResponseDto.java
+│               │   │   └── WeatherRequestDto.java
+│               │   │
+│               │   └── userDto/
+│               │       ├── LoginRequestDto.java
+│               │       ├── SignupRequestDto.java
+│               │       ├── UserBriefDto.java
+│               │       ├── UserRequestDto.java
+│               │       └── UserResponseDto.java
+│               │
+│               ├── entity/
+│               │   ├── BaseTimeEntity.java
+│               │   ├── Comment.java
+│               │   ├── Schedule.java
+│               │   ├── User.java
+│               │   ├── UserRoleEnum.java
+│               │   └── UserSchedule.java
+│               │
+│               ├── exception/
+│               │   └── UnauthorizedException.java
+│               │
+│               ├── jwt/
+│               │   ├── JwtAuthenticationFilter.java
+│               │   └── JwtUtil.java
+│               │
+│               ├── repository/
+│               │   ├── CommentRepository.java
+│               │   ├── ScheduleRepository.java
+│               │   └── UserRepository.java
+│               │
+│               └── service/
+│                   ├── CommentService.java
+│                   ├── ScheduleService.java
+│                   ├── UserService.java
+│                   └── WeatherService.java
+│
+├── resources/
+│   ├── static/
+│   ├── templates/
+│   └── application.yml
+│
+└── test/
+    └── java/
+        └── com.webstrdy00.upgrade_schedule/
+            └── UpgradeScheduleApplicationTests.java
+
+├── .gitignore
+├── build.gradle
+├── gradlew
+├── gradlew.bat
+├── HELP.md
+├── README.md
+└── settings.gradle
+
+```
