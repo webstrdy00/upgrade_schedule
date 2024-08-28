@@ -2,6 +2,7 @@ package com.webstrdy00.upgrade_schedule.controller;
 
 import com.webstrdy00.upgrade_schedule.dto.scheduleDto.ScheduleResponseDto;
 import com.webstrdy00.upgrade_schedule.dto.userDto.LoginRequestDto;
+import com.webstrdy00.upgrade_schedule.dto.userDto.SignupRequestDto;
 import com.webstrdy00.upgrade_schedule.dto.userDto.UserRequestDto;
 import com.webstrdy00.upgrade_schedule.dto.userDto.UserResponseDto;
 import com.webstrdy00.upgrade_schedule.exception.UnauthorizedException;
@@ -29,8 +30,8 @@ public class UserController {
      * @return ResponseEntity 상태코드 및 JWT 토큰
      */
     @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@RequestBody UserRequestDto requestDto){
-        String token = userService.createUser(requestDto);
+    public ResponseEntity<String> signUp(@RequestBody SignupRequestDto requestDto){
+        String token = userService.signupUser(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .header(JwtUtil.AUTHORIZATION_HEADER, token)
                 .build();

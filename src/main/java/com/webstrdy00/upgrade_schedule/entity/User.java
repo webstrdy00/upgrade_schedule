@@ -25,6 +25,10 @@ public class User extends BaseTimeEntity{
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private UserRoleEnum role;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserSchedule> userScheduleList = new ArrayList<>();
 

@@ -1,5 +1,6 @@
 package com.webstrdy00.upgrade_schedule.jwt;
 
+import com.webstrdy00.upgrade_schedule.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -19,6 +20,8 @@ public class JwtUtil {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
 
+    public static final String AUTHORIZATION_KEY = "role";
+
     @Value("${jwt.secret.key}")
     private String secret;
     private Key key;
@@ -37,12 +40,13 @@ public class JwtUtil {
     }
 
     // jwt 토큰 생성
-    public String createToken(String email){
+    public String createToken(String email, UserRoleEnum role){
         Date date = new Date();
 
         return BEARER_PREFIX +
                 Jwts.builder()
                 .setSubject(email)
+                .claim(AUTHORIZATION_KEY, role.name())
                 .setIssuedAt(date)
                 .setExpiration(new Date(date.getTime() + expiration))
                 .signWith(signatureAlgorithm, key)
@@ -107,9 +111,24 @@ public class JwtUtil {
 
     // 토큰에서 이메일 추출
     public String getEmailFromToken(String token){
-        return Jwts.parserBuilder().setSigningKey(key).build()
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+    }
+
+    // 토큰에서 권한 정보 추출
+    public UserRoleEnum getRoleFromToken(String token){
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        String role = claims.get(AUTHORIZATION_KEY, String.class);
+        logger.info(role);
+        return UserRoleEnum.valueOf(role);
     }
 }
