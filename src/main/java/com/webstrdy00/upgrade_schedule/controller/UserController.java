@@ -30,11 +30,9 @@ public class UserController {
      * @return ResponseEntity 상태코드 및 JWT 토큰
      */
     @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@RequestBody SignupRequestDto requestDto){
-        String token = userService.signupUser(requestDto);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .header(JwtUtil.AUTHORIZATION_HEADER, token)
-                .build();
+    public ResponseEntity<UserResponseDto> signUp(@RequestBody SignupRequestDto requestDto){
+        UserResponseDto createUser = userService.signupUser(requestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createUser);
     }
 
     /**
