@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,12 @@ public class Schedule extends BaseTimeEntity{
 
     @Column(nullable = false)
     private String content;
+    
+    @Column
+    private LocalDate date;  // 일정 날짜
+    
+    @Column
+    private String weather;  // 날씨 정보
 
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();

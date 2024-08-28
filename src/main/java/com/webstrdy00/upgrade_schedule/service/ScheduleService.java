@@ -6,29 +6,29 @@ import com.webstrdy00.upgrade_schedule.dto.scheduleDto.ScheduleResponseDto;
 import com.webstrdy00.upgrade_schedule.dto.userDto.UserBriefDto;
 import com.webstrdy00.upgrade_schedule.entity.Schedule;
 import com.webstrdy00.upgrade_schedule.entity.User;
-import com.webstrdy00.upgrade_schedule.entity.UserRoleEnum;
 import com.webstrdy00.upgrade_schedule.repository.ScheduleRepository;
 import com.webstrdy00.upgrade_schedule.repository.UserRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
+    private final WeatherService weatherService;
     @Autowired
-    public ScheduleService(ScheduleRepository scheduleRepository, UserRepository userRepository) {
+    public ScheduleService(ScheduleRepository scheduleRepository, UserRepository userRepository, WeatherService weatherService) {
         this.scheduleRepository = scheduleRepository;
         this.userRepository = userRepository;
+        this.weatherService = weatherService;
     }
 
     public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto, Long userId) {
@@ -37,6 +37,11 @@ public class ScheduleService {
 
         Schedule schedule = requestDto.toEntity();
         schedule.addUser(user);
+
+        // 날씨 정보 조회 및 저장
+        String weatherInfo = weatherService.getWeatherInfo(requestDto.getDate());
+        schedule.setWeather(weatherInfo);
+
         Schedule savedSchedule = scheduleRepository.save(schedule);
 
         return ScheduleResponseDto.fromEntity(savedSchedule);

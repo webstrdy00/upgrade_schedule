@@ -8,6 +8,7 @@ import com.webstrdy00.upgrade_schedule.entity.Schedule;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +20,9 @@ public class ScheduleResponseDto {
     private Long id;
     private String title;
     private String content;
+    @JsonFormat(pattern = "MM-dd")
+    private LocalDate date;
+    private String weather;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createAt;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -32,6 +36,8 @@ public class ScheduleResponseDto {
         dto.setId(schedule.getId());
         dto.setTitle(schedule.getTitle());
         dto.setContent(schedule.getContent());
+        dto.setWeather(schedule.getWeather());
+        dto.setDate(schedule.getDate());
         dto.setCreateAt(schedule.getCreatedAt());
         dto.setModifiedAt(schedule.getModifiedAt());
         dto.setComments(schedule.getComments().stream()
