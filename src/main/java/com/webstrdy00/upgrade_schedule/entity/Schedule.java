@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,16 +18,22 @@ public class Schedule extends BaseTimeEntity{
     private Long id;
 
     @Column(nullable = false)
-    private String username;
-
-    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
     private String content;
+    
+    @Column
+    private LocalDate date;  // 일정 날짜
+    
+    @Column
+    private String weather;  // 날씨 정보
 
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<UserSchedule> userScheduleList = new ArrayList<>();
 
 
     public void addComment(Comment comment){
@@ -37,5 +44,13 @@ public class Schedule extends BaseTimeEntity{
     public void removeComment(Comment comment){
         comments.remove(comment);
         comment.setSchedule(null);
+    }
+
+    public void addUser(User user) {
+        UserSchedule userSchedule = new UserSchedule();
+        userSchedule.setSchedule(this);
+        userSchedule.setUser(user);
+        this.userScheduleList.add(userSchedule);
+        user.getUserScheduleList().add(userSchedule);
     }
 }
