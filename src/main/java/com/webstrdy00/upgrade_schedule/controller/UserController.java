@@ -1,8 +1,11 @@
 package com.webstrdy00.upgrade_schedule.controller;
 
 import com.webstrdy00.upgrade_schedule.dto.scheduleDto.ScheduleResponseDto;
+import com.webstrdy00.upgrade_schedule.dto.userDto.LoginRequestDto;
 import com.webstrdy00.upgrade_schedule.dto.userDto.UserRequestDto;
 import com.webstrdy00.upgrade_schedule.dto.userDto.UserResponseDto;
+import com.webstrdy00.upgrade_schedule.exception.UnauthorizedException;
+import com.webstrdy00.upgrade_schedule.jwt.JwtUtil;
 import com.webstrdy00.upgrade_schedule.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,14 +24,33 @@ public class UserController {
     }
 
     /**
-     * 유저 생성 코드
+     * 회원 가입 코드
      * @param requestDto
-     * @return ResponseEntity 상태코드 및 responseDto
+     * @return ResponseEntity 상태코드 및 JWT 토큰
      */
-    @PostMapping
-    public ResponseEntity<UserResponseDto> createUser(@RequestBody UserRequestDto requestDto){
-        UserResponseDto createUser = userService.createUser(requestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createUser);
+    @PostMapping("/signup")
+    public ResponseEntity<String> signUp(@RequestBody UserRequestDto requestDto){
+        String token = userService.createUser(requestDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .header(JwtUtil.AUTHORIZATION_HEADER, token)
+                .build();
+    }
+
+    /**
+     *
+     * @param requestDto
+     * @return JWT 토큰
+     */
+    @PostMapping("/login")
+    public ResponseEntity<Void> login(@RequestBody LoginRequestDto requestDto){
+        try {
+            String token = userService.login(requestDto);
+            return ResponseEntity.ok()
+                    .header(JwtUtil.AUTHORIZATION_HEADER, token)
+                    .build();
+        }catch (UnauthorizedException e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
     /**

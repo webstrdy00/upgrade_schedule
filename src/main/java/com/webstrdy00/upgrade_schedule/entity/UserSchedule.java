@@ -17,6 +17,6 @@ public class UserSchedule {   // user-schedule 중간 엔티티
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "scedule_id")
+    @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 }
