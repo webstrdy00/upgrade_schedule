@@ -4,7 +4,9 @@ import com.webstrdy00.upgrade_schedule.dto.scheduleDto.ScheduleListResponseDto;
 import com.webstrdy00.upgrade_schedule.dto.scheduleDto.ScheduleRequestDto;
 import com.webstrdy00.upgrade_schedule.dto.scheduleDto.ScheduleResponseDto;
 import com.webstrdy00.upgrade_schedule.dto.userDto.UserBriefDto;
+import com.webstrdy00.upgrade_schedule.entity.UserRoleEnum;
 import com.webstrdy00.upgrade_schedule.service.ScheduleService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -81,7 +83,11 @@ public class ScheduleController {
      * @return responseDto
      */
     @PutMapping("/{scheduleId}")
-    public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable Long scheduleId, @RequestBody ScheduleRequestDto requestDto){
+    public ResponseEntity<ScheduleResponseDto> updateSchedule(@PathVariable Long scheduleId, @RequestBody ScheduleRequestDto requestDto, HttpServletRequest request){
+        UserRoleEnum userRole = (UserRoleEnum) request.getAttribute("userRole");
+        if (userRole != UserRoleEnum.ADMIN)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
         ScheduleResponseDto updateSchedule = scheduleService.updateSchedule(scheduleId, requestDto);
         return ResponseEntity.ok(updateSchedule);
     }
@@ -105,7 +111,11 @@ public class ScheduleController {
      * @return
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable Long id){
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long id, HttpServletRequest request){
+        UserRoleEnum userRole = (UserRoleEnum) request.getAttribute("userRole");
+        if (userRole != UserRoleEnum.ADMIN)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
         scheduleService.deleteSchedule(id);
         return ResponseEntity.noContent().build();
     }

@@ -3,15 +3,18 @@ package com.webstrdy00.upgrade_schedule.service;
 import com.webstrdy00.upgrade_schedule.config.PasswordEncoder;
 import com.webstrdy00.upgrade_schedule.dto.scheduleDto.ScheduleResponseDto;
 import com.webstrdy00.upgrade_schedule.dto.userDto.LoginRequestDto;
+import com.webstrdy00.upgrade_schedule.dto.userDto.SignupRequestDto;
 import com.webstrdy00.upgrade_schedule.dto.userDto.UserRequestDto;
 import com.webstrdy00.upgrade_schedule.dto.userDto.UserResponseDto;
 import com.webstrdy00.upgrade_schedule.entity.Schedule;
 import com.webstrdy00.upgrade_schedule.entity.User;
+import com.webstrdy00.upgrade_schedule.entity.UserRoleEnum;
 import com.webstrdy00.upgrade_schedule.exception.UnauthorizedException;
 import com.webstrdy00.upgrade_schedule.jwt.JwtUtil;
 import com.webstrdy00.upgrade_schedule.repository.ScheduleRepository;
 import com.webstrdy00.upgrade_schedule.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +27,8 @@ public class UserService {
     private final ScheduleRepository scheduleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    @Value("${jwt.admin_token}")
+    private String ADMIN_TOKEN;
 
     @Autowired
     public UserService(UserRepository userRepository, ScheduleRepository scheduleRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
@@ -34,7 +39,7 @@ public class UserService {
     }
 
 //    @Transactional
-    public String createUser(UserRequestDto requestDto) {
+    public String signupUser(SignupRequestDto requestDto) {
         // 이메일 중복 체크
         if (userRepository.findByEmail(requestDto.getEmail()).isPresent()){
             throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
@@ -45,9 +50,19 @@ public class UserService {
         User user = requestDto.toEntity();
         user.setPassword(encodedPassword);  // 암호화된 비밀번호 설정
 
+        UserRoleEnum role = UserRoleEnum.USER;
+        if (requestDto.isAdmin()){
+            if (!ADMIN_TOKEN.equals(requestDto.getAdminToken())){
+                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가합니다.");
+            }
+            role = UserRoleEnum.ADMIN;
+        }
+
+        user.setRole(role);
+
         User savedUser = userRepository.save(user);
 
-        return jwtUtil.createToken(savedUser.getEmail());
+        return jwtUtil.createToken(savedUser.getEmail(), user.getRole());
     }
 
     public String login(LoginRequestDto requestDto) {
@@ -57,7 +72,7 @@ public class UserService {
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword()))
             throw new UnauthorizedException("이메일 또는 비밀번호가 일치하지 않습니다.");
 
-        String token = jwtUtil.createToken(user.getEmail());
+        String token = jwtUtil.createToken(user.getEmail(), user.getRole());
 
         return token;
     }

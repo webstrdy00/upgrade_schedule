@@ -1,5 +1,6 @@
 package com.webstrdy00.upgrade_schedule.jwt;
 
+import com.webstrdy00.upgrade_schedule.entity.UserRoleEnum;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -47,9 +48,12 @@ public class JwtAuthenticationFilter  extends OncePerRequestFilter {
             // 토큰 유효성 검사
             if (jwtUtil.validateToken(token)){
                 String userEmail = jwtUtil.getEmailFromToken(token);
+                UserRoleEnum userRole = jwtUtil.getRoleFromToken(token);
                 // 인증 정보 설정
                 request.setAttribute("userEmail", userEmail);
+                request.setAttribute("userRole", userRole);
                 logger.info("User authenticated: {}", userEmail);
+                logger.info("User authenticated: {}", userRole);
                 filterChain.doFilter(request, response);
             }else {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "유효하지 않은 토큰입니다.");
