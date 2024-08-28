@@ -40,7 +40,7 @@ public class UserService {
     }
 
 //    @Transactional
-    public String signupUser(SignupRequestDto requestDto) {
+    public UserResponseDto signupUser(SignupRequestDto requestDto) {
         // 이메일 중복 체크
         if (userRepository.findByEmail(requestDto.getEmail()).isPresent()){
             throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
@@ -63,7 +63,7 @@ public class UserService {
 
         User savedUser = userRepository.save(user);
 
-        return jwtUtil.createToken(savedUser.getEmail(), user.getRole());
+        return UserResponseDto.fromEntity(savedUser);
     }
 
     public String login(LoginRequestDto requestDto) {
