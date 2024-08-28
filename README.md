@@ -1,3 +1,12 @@
+# Upgrade Schedule Project
+## 📝 프로젝트 소개
+
+주요 기능:
+- 사용자 관리 (회원가입, 로그인, 조회, 수정, 삭제, 일정 할당, 일정 삭제)
+- 일정 관리 (생성, 조회, 수정, 삭제, 사용자 할당, 사용자 삭제)
+- 댓글 시스템 (생성, 조회, 수정, 삭제)
+- 날씨 정보 연동
+
 # 💻 STACK
 
 Environment
@@ -17,6 +26,42 @@ Development
 
 # :grey_exclamation: API Table & Script
 ## [🖇️ Postman API Script Link](https://documenter.getpostman.com/view/31167272/2sAXjJ6tTB)
+
+## API 명세
+
+### Schedule
+| 기능          | Method | URL                    | Request| Response|
+| ----         |:----:  |:----:                  |:----:|:----:|
+| 일정 작성      | Post  |/api/schedules            |Body  | 등록정보
+| 선택한 일정 조회 | Get   |/api/schedules/{scheduleId}|scheduleId |단건 응답 정보
+| 일정 목록 조회  | Get   |/api/schedules/?page=?,size=?|Param |다건 응답 정보
+| 일정에 할당된 유저 조회  | Get   |/api/schedules/{scheduleId}/users|scheduleId |단건 응답 정보
+| 선택한 일정 수정 | Put   |/api/schedule/{scheduleId}|scheduleId, Body  |수정 정보
+| 일정 삭제  |Delete   |/api/schedules/{scheduleId}|schedueId |-
+| 일정에 유저 할당  |Put   |/api/schedules/{scheduleId}/assign?userId=?|schedulId, userId|등록정보
+| 일정에 유저 삭제  |Delete   |/api/schedules/{scheduleId}/users/{userId}|scheduleId, userId|삭제정보
+
+
+### Comment 
+| 기능          | Method | URL                    | Request| Response|
+| ----         |:----:  |:----:                  |:----:|:----:|
+| 댓글 작성      | Post  |/api/schedules/{scheduleId}/comments|scheduleId, body  | 등록정보
+| 선택한 댓글 조회 | Get   |/api/schedules/{scheduleId}/comments/{commentId} |scheduleId, commentId |단건 응답 정보
+| 댓글 목록 조회  | Get   |/api/schedules/{scheduleId}/comments|scheduleId   |다건 응답 정보
+| 선택한 댓글 수정 | Put   |/api/schedules/{scheduleId}/comments/{commentId}|scheduleId, commentId, Body  |수정 정보
+| 선택한 댓글 삭제 | Delete   |/api/schedules/{scheduleId}/comments/{commentId} |scheduleId, commentId  |-
+
+### User 
+| 기능          | Method | URL                    | Request| Response|
+| ----         |:----:  |:----:                  |:----:|:----:|
+| 유저 회원 가입  | Post  |/api/users/signup          |Body  | 등록정보
+| 로그인        | Post  |/api/users/login               |Body  | JwtToken반환
+| 유저에게 일정 할당 | Post  |/api/users//{userId}/schedules?scheduleId=? |userId, Param | 수정 정보
+| 선택한 유저 조회 | Get   |/api/users/{userId} |userId |단건 응답 정보
+| 유저 목록 조회  | Get   |/api/users                   |-   |다건 응답 정보
+| 선택한 유저 수정 | Put   |/api/users/{user_id}|userId, Body  |수정 정보
+| 선택한 유저 삭제 | Delete   |/api/users/{user_id} |userId  |-
+| 유저에 일정 삭제 | Delete   |/api/users/{user_id}/schedules/{scheduleId} |userId, scheduleId  |수정 정보
 
 
 # :bar_chart: ERD 
