@@ -1,0 +1,42 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset : UTF-8
+      enabled: true
+      force: true
+
+spring:
+  application:
+    name: upgrade_schedule
+
+  mvc:
+    contentnegotiation:
+      defaultContentType: application/json
+
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/upgrade_schedule
+    username: root
+    password: 12345
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+        show_sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+jwt:
+  secret:
+    key: 7JeF6re466CI7J2065Oc7J287KCV6rSA66as7ZSE66Gc7KCd7Yq46rCc67Cc7J6Q7J2064+Z7ZyY
+  expiration: 3600000
+  admin_token: dddd
